@@ -1,0 +1,50 @@
+import {Injectable} from '@angular/core';
+import {Observable, of, throwError} from 'rxjs';
+import {HttpErrorResponse} from '@angular/common/http';
+import {UserCredentials} from '../interfaces/user-credentials';
+import {AuthTokenResponse} from '../interfaces/auth-token-response';
+import {User} from '../interfaces/user';
+
+
+function generateToken(): string {
+    let token = '';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (let i = 0; i < 20; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    return token;
+}
+
+@Injectable({
+    providedIn: 'root',
+})
+export class AuthService {
+
+    login(payload: UserCredentials): Observable<AuthTokenResponse> {
+        if (payload.user === 'admin' && payload.password === '123') {
+            return of({token: generateToken()});
+        }
+
+        return throwError(() => new HttpErrorResponse({
+            status: 401,
+            statusText: 'Unauthorized',
+        }));
+    }
+
+    getCurrentUser(token: string): Observable<User> {
+        return of({
+            userName: 'admin'
+        });
+    }
+
+    refreshToken(token: string) {
+        return of({token: generateToken()});
+    }
+
+    logout() {
+        return of({})
+    }
+
+}

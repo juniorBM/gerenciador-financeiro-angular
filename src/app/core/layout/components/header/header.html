@@ -1,0 +1,12 @@
+<header>
+    <mat-toolbar class="toolbar">
+        <div class="toolbar-content">
+            <span>Gerenciador Financeiro</span>
+
+            @if(isLoggedIn()) {
+                <button (click)="logout()" matButton="filled" class="toolbar-logout">Sair</button>
+            }
+        </div>
+
+    </mat-toolbar>
+</header>
